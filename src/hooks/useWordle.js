@@ -5,7 +5,7 @@ const useWordle = (solution) => {
     const [turn, setTurn] = useState(0)
     const [currentGuess, setCurrentGuess] = useState('')
     const [guesses, setGuesses] = useState([]) //each guess is an array
-    const [history, setHistoty] = useState([]) //each guess is an string
+    const [history, setHistoty] = useState(['ninja', 'hello']) //each guess is an string
     const [isCorrect, setIsCorrect] = useState(false)
 
 
@@ -27,6 +27,26 @@ const useWordle = (solution) => {
     // if user presses enter, add the new guess
 
     const handleKeyUp = ({key}) => {
+
+        if(key === 'Enter'){
+            //only add guess if turn is less than 5
+            if(turn > 5){
+                console.log('you are out of guess.')
+                return
+            }
+            //do not allow duplicate words
+            if (history.includes(currentGuess)){
+                console.log('you already tried that word.')
+                return
+            }
+            //check word is 5 chars
+            if(currentGuess.length !== 5){
+                console.log('must have 5 chars')
+                return
+            }
+
+            formatGuess()
+        }
 
         if(key === 'Backspace'){
             setCurrentGuess((prev) =>{
