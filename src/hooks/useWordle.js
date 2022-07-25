@@ -4,8 +4,8 @@ const useWordle = (solution) => {
 
     const [turn, setTurn] = useState(0)
     const [currentGuess, setCurrentGuess] = useState('')
-    const [guesses, setGuesses] = useState([]) //each guess is an array
-    const [history, setHistoty] = useState(['ninja', 'hello']) //each guess is an string
+    const [guesses, setGuesses] = useState([...Array(6)]) //each guess is an array
+    const [history, setHistory] = useState([]) //each guess is an string
     const [isCorrect, setIsCorrect] = useState(false)
 
 
@@ -40,8 +40,22 @@ const useWordle = (solution) => {
     // update the isCorrect state if the guess is correct
     // add one to the turn state
 
-    const addNEwGuess = () => {
-
+    const addNEwGuess = (formattedGuess) => {
+        if(currentGuess === solution){
+            setIsCorrect(true)
+        }
+        setGuesses(prevGuesses =>{
+            let newGuesses = [...prevGuesses]
+            newGuesses[turn] = formattedGuess
+            return newGuesses
+        })
+        setHistory(prevHistory => {
+            return[...prevHistory, currentGuess]
+        })
+        setTurn((prevTurn) => {
+            return prevTurn + 1
+        })
+        setCurrentGuess('')
     }
 
     // handle keyup event & track current guess
@@ -67,7 +81,7 @@ const useWordle = (solution) => {
             }
 
             const formatted = formatGuess()
-            console.log(formatted)
+            addNEwGuess(formatted)
         }
 
         if(key === 'Backspace'){
